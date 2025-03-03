@@ -81,4 +81,16 @@ public class Drink {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Drink{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", foodTruck=" + foodTruck +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", alcoholic=" + alcoholic +
+                '}';
+    }
 }

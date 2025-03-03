@@ -1,0 +1,68 @@
+######### NORMAL OPERATION  ###########
+
+### Read all users with File variable
+@baseUrl = http://localhost:8080
+
+GET {{baseUrl}}/users
+Authorization: {{adminToken}}
+
+### Create a pizza by using the admin account
+#### First login as the admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"admin",
+  "password":"admin"
+}
+
+> {% client.global.set("adminToken", response.body.token) %}
+
+#### Create an user with the admin token
+POST {{baseUrl}}/users/
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "username": "ItsMe",
+  "email": "itsme@gmail.com",
+  "password": "its",
+  "role": "USER"
+}
+
+######### ERROR OPERATION  ###########
+
+### 1. Create a pizza without a token
+POST {{baseUrl}}/users/
+Content-Type: application/json
+
+{
+  "username": "ItsMe",
+  "email": "itsme@gmail.com",
+  "password": "its",
+  "role": "USER"
+}
+
+### 2. Create an user without being the admin, use user account
+#### 2.1 First login as the user
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"user",
+  "password":"user"
+}
+
+> {% client.global.set("userToken", response.body.token) %}
+
+#### Create an user with a user account (ERROR)
+POST {{baseUrl}}/users/
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "username": "ItsMe",
+  "email": "itsme@gmail.com",
+  "password": "its",
+  "role": "USER"
+}

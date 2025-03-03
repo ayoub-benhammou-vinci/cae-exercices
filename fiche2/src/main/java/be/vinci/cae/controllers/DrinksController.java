@@ -2,10 +2,7 @@ package be.vinci.cae.controllers;
 
 import be.vinci.cae.models.Drink;
 import be.vinci.cae.services.DrinksService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/drinks")
@@ -25,5 +22,15 @@ public class DrinksController {
     public Drink getDrink(@PathVariable() String id){
         int idNumber = Integer.parseInt(id);
         return drinkService.getDrink(idNumber);
+    }
+
+    @PostMapping
+    public Drink createDrink(Drink drink){
+        return drinkService.createDrink(drink);
+    }
+
+    @PutMapping("/{id}")
+    public Drink updateDrink(@RequestBody Drink drink, @PathVariable long id){
+        return drinkService.updateDrink(id, drink);
     }
 }

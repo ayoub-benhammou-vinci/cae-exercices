@@ -1,0 +1,71 @@
+######### NORMAL OPERATION  ###########
+
+### Read all books with File variable
+@baseUrl = http://localhost:8080
+
+GET {{baseUrl}}/books
+
+### Create a book by using the admin account
+#### First login as the admin
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"admin",
+  "password":"admin"
+}
+
+> {% client.global.set("adminToken", response.body.token) %}
+
+#### Create a book with the admin token
+POST {{baseUrl}}/books
+Content-Type: application/json
+Authorization: {{adminToken}}
+
+{
+  "author": "Ayoub",
+  "publishYear": 2005,
+  "title": "Metroid Prime"
+}
+
+#### Find a book with it id
+GET {{baseUrl}}/books/1
+
+#### Delete a book with it id
+DELETE {{baseUrl}}/books/2
+Authorization: {{adminToken}}
+
+######### ERROR OPERATION  ###########
+
+### 1. Create a book without a token
+POST {{baseUrl}}/books/
+Content-Type: application/json
+
+{
+  "author": "Ayoub",
+  "publishYear": 2005,
+  "title": "Metroid Prime"
+}
+
+### 2. Create a book without being the admin, use manager account
+#### 2.1 First login as the manager
+POST {{baseUrl}}/auths/login
+Content-Type: application/json
+
+{
+  "username":"user",
+  "password":"user"
+}
+
+> {% client.global.set("userToken", response.body.token) %}
+
+#### 2.2 Try to create a book with the user token
+POST {{baseUrl}}/books/
+Content-Type: application/json
+Authorization: {{userToken}}
+
+{
+  "author": "Ayoub",
+  "publishYear": 2005,
+  "title": "Metroid Prime"
+}

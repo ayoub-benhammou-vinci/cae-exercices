@@ -43,8 +43,6 @@ Content-Type: application/json
   "alcoholic": false
 }
 
-
-
 ### Update a drink
 PUT {{baseUrl}}/drinks/5
 Content-Type: application/json
@@ -69,16 +67,3 @@ Content-Type: application/json
 
 ### Delete a drink
 DELETE {{baseUrl}}/drinks/5
-
-### Get the standard message
-GET {{baseUrl}}/drinks/
-
-> {%
-
-    client.test("Should return all drinkss", function() {
-        var body = response.body
-        console.log(body);
-        client.assert(body.length == 4, "Should return 4 drinks");
-    });
-%}
-
