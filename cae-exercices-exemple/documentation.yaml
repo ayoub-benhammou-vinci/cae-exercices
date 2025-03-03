@@ -1,0 +1,194 @@
+openapi: 3.0.1
+info:
+  title: Gestion des tâches
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /tasks/:
+    get:
+      tags:
+        - task-controller
+      summary: Afficher toutes les tâches
+      operationId: findAll
+      parameters:
+        - name: completed
+          in: query
+          description: Boolean qui permet de savoir si il faut afficher seulement les
+            tâches completés
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: L'affichage de toutes les tâches a réussi
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+        - task-controller
+      summary: Création d'une tâche
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTask"
+        required: true
+      responses:
+        "409":
+          description: "Conflit : Un autre titre existant existe déjà en DB"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+        "201":
+          description: Tâche crée
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Requête non valide
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+  /tasks:
+    get:
+      tags:
+        - task-controller
+      summary: Afficher toutes les tâches
+      operationId: findAll_1
+      parameters:
+        - name: completed
+          in: query
+          description: Boolean qui permet de savoir si il faut afficher seulement les
+            tâches completés
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: L'affichage de toutes les tâches a réussi
+          content:
+            '*/*':
+              schema:
+                type: object
+    post:
+      tags:
+        - task-controller
+      summary: Création d'une tâche
+      operationId: create_1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTask"
+        required: true
+      responses:
+        "409":
+          description: "Conflit : Un autre titre existant existe déjà en DB"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+        "201":
+          description: Tâche crée
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Requête non valide
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+  /tasks/{id}/complete:
+    patch:
+      tags:
+        - task-controller
+      summary: Marqué une tâche comme complétée
+      operationId: markCompleted
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tâche
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "404":
+          description: Tâche invalide
+        "400":
+          description: Tâche déjà completée
+        "204":
+          description: Tâche completée
+  /tasks/{id}:
+    get:
+      tags:
+        - task-controller
+      summary: Afficher une tâche grâce à son ID
+      operationId: findOne
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tâche
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Tâche trouvé
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+        "404":
+          description: Tâche invalide
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Task"
+    delete:
+      tags:
+        - task-controller
+      summary: Supprimer une tâche
+      operationId: delete
+      parameters:
+        - name: id
+          in: path
+          description: ID de la tâche
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "404":
+          description: Tâche non trouvée
+        "204":
+          description: Tâche supprimée
+components:
+  schemas:
+    NewTask:
+      type: object
+      properties:
+        title:
+          type: string
+      description: La nouvelle tâche à ajouter
+    Task:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        completed:
+          type: boolean
